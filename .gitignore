@@ -1,1 +1,10 @@
 results/
+
+# 虚拟环境
+.env
+venv/
+env/
+
+# 编辑器配置
+.vscode/
+.idea/

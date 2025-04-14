@@ -10,6 +10,7 @@ from langchain.prompts import PromptTemplate
 from langchain_huggingface import HuggingFacePipeline
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 from huggingface_hub import login
+from dotenv import load_dotenv
 
 
 class LLMComparisonPipeline:
@@ -283,6 +284,8 @@ class LLMComparisonPipeline:
 
 
 def main():
+    load_dotenv()  # 自动加载 .env 中的变量
+
     # Check for HuggingFace token
     if os.environ.get('HUGGINGFACE_TOKEN') is None:
         token = input("Enter your HuggingFace token (or press Enter to skip): ")
