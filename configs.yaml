@@ -22,9 +22,10 @@ models:
   chatgpt:
     # Placeholder for manual comparison
     interface: "web"
-    model: "gpt-3.5-turbo"  # For reference only
+    model: "gpt-4-turbo"
 
 prompt_template: "Task: {input}\nOutput:"
+#prompt_template: "Task: {task}\nInput: {input}\nOutput:" # Task and Input will be replaced with their placeholders. Output will be given by the model.
 
 prompt_pairs:
   - prompt: "is this text positive or negative? Input: Today's weather is sunny and great!"
@@ -37,6 +38,23 @@ prompt_pairs:
     expected: "Photosynthesis is the process by which plants convert sunlight into energy."
   - prompt: "Generate a short haiku about autumn."
     expected: "A poem about autumn with 5-7-5 syllable structure"
+
+#prompt_pairs:
+#  - task: "is this text positive or negative?"
+#    input: "Today's weather is sunny and great!"
+#    expected: "Positive"
+#  - task: "Translate the following English text to French"
+#    input: "Hello, how are you?"
+#    expected: "Bonjour, comment allez-vous?"
+#  - task: "Calculate the sum of"
+#    input: "125 + 437"
+#    expected: "562"
+#  - task: "Explain what photosynthesis is in one sentence"
+#    input: ""
+#    expected: "Photosynthesis is the process by which plants convert sunlight into energy."
+#  - task: "Generate a short haiku about autumn"
+#    input: ""
+#    expected: "A poem about autumn with 5-7-5 syllable structure"
 
 output:
   save_results: true

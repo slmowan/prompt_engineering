@@ -159,38 +159,38 @@ class LLMComparisonPipeline:
                     "name": self.config['models']['local']['name'],
                     "output": output,
                     "error": error,
-                    "evaluation": {
-                        "match_status": match_status,
-                        "match_score": match_score
-                    }
+                    # "evaluation": {
+                    #     "match_status": match_status,
+                    #     "match_score": match_score
+                    # }
                 },
                 "chatgpt": {
                     "name": self.config['models']['chatgpt']['model'],
                     "prompt_for_manual_testing": input_text,
                     "output": "To be filled manually",
-                    "evaluation": {
-                        "match_status": "Not evaluated yet",
-                        "match_score": None
-                    }
+                    # "evaluation": {
+                    #     "match_status": "Not evaluated yet",
+                    #     "match_score": None
+                    # }
                 }
             }
 
             results["prompts"].append(prompt_result)
 
-        # Add summary to results
-        results["summary"] = {
-            "local_model": {
-                "name": self.config['models']['local']['name'],
-                "status_counts": status_counts,
-                "average_match_score": sum(
-                    prompt["local_model"]["evaluation"]["match_score"] for prompt in results["prompts"]) / len(
-                    results["prompts"]) if results["prompts"] else 0
-            },
-            "chatgpt": {
-                "name": self.config['models']['chatgpt']['model'],
-                "status": "Pending manual evaluation"
-            }
-        }
+        # # Add summary to results
+        # results["summary"] = {
+        #     "local_model": {
+        #         "name": self.config['models']['local']['name'],
+        #         "status_counts": status_counts,
+        #         "average_match_score": sum(
+        #             prompt["local_model"]["evaluation"]["match_score"] for prompt in results["prompts"]) / len(
+        #             results["prompts"]) if results["prompts"] else 0
+        #     },
+        #     "chatgpt": {
+        #         "name": self.config['models']['chatgpt']['model'],
+        #         "status": "Pending manual evaluation"
+        #     }
+        # }
 
         # Save results as JSON
         results_file = os.path.join(self.output_dir, 'llm_comparison_results.json')
@@ -205,86 +205,86 @@ class LLMComparisonPipeline:
 
         return results
 
-    def generate_chatgpt_instructions(self):
-        """Generate instructions for manual ChatGPT testing"""
-        # Load results to get the formatted prompts
-        results_file = os.path.join(self.output_dir, 'llm_comparison_results.json')
-        with open(results_file, 'r') as f:
-            results = json.load(f)
+    # def generate_chatgpt_instructions(self):
+    #     """Generate instructions for manual ChatGPT testing"""
+    #     # Load results to get the formatted prompts
+    #     results_file = os.path.join(self.output_dir, 'llm_comparison_results.json')
+    #     with open(results_file, 'r') as f:
+    #         results = json.load(f)
+    #
+    #     instructions = "# ChatGPT Testing Instructions\n\n"
+    #     instructions += "Copy and paste each of the following prompts into ChatGPT and record the responses:\n\n"
+    #
+    #     for prompt_result in results["prompts"]:
+    #         instructions += f"## Prompt {prompt_result['id']}:\n```\n{prompt_result['prompt']}\n```\n\n"
+    #         instructions += f"Expected output: {prompt_result['expected']}\n\n"
+    #         instructions += "ChatGPT response: [Copy response here]\n\n"
+    #         instructions += "---\n\n"
+    #
+    #     instructions_file = os.path.join(self.output_dir, 'chatgpt_instructions.md')
+    #     with open(instructions_file, 'w') as f:
+    #         f.write(instructions)
+    #
+    #     print(f"ChatGPT testing instructions saved to: {instructions_file}")
 
-        instructions = "# ChatGPT Testing Instructions\n\n"
-        instructions += "Copy and paste each of the following prompts into ChatGPT and record the responses:\n\n"
-
-        for prompt_result in results["prompts"]:
-            instructions += f"## Prompt {prompt_result['id']}:\n```\n{prompt_result['prompt']}\n```\n\n"
-            instructions += f"Expected output: {prompt_result['expected']}\n\n"
-            instructions += "ChatGPT response: [Copy response here]\n\n"
-            instructions += "---\n\n"
-
-        instructions_file = os.path.join(self.output_dir, 'chatgpt_instructions.md')
-        with open(instructions_file, 'w') as f:
-            f.write(instructions)
-
-        print(f"ChatGPT testing instructions saved to: {instructions_file}")
-
-    def update_with_chatgpt_results(self, chatgpt_results):
-        """Update the results with manually collected ChatGPT responses"""
-        # Load existing results
-        results_file = os.path.join(self.output_dir, 'llm_comparison_results.json')
-        with open(results_file, 'r') as f:
-            results = json.load(f)
-
-        # Update with ChatGPT results
-        chatgpt_status_counts = {"Exact Match": 0, "Partial Match": 0, "No Match": 0}
-        total_score = 0
-
-        for i, response in enumerate(chatgpt_results):
-            if i < len(results["prompts"]):
-                expected = results["prompts"][i]["expected"]
-
-                # Evaluate ChatGPT response
-                if response.lower() == expected.lower():
-                    match_status = "Exact Match"
-                    match_score = 1.0
-                    chatgpt_status_counts["Exact Match"] += 1
-                elif expected.lower() in response.lower():
-                    match_status = "Partial Match"
-                    match_score = 0.5
-                    chatgpt_status_counts["Partial Match"] += 1
-                else:
-                    match_status = "No Match"
-                    match_score = 0.0
-                    chatgpt_status_counts["No Match"] += 1
-
-                total_score += match_score
-
-                # Update the result
-                results["prompts"][i]["chatgpt"]["output"] = response
-                results["prompts"][i]["chatgpt"]["evaluation"] = {
-                    "match_status": match_status,
-                    "match_score": match_score
-                }
-
-        # Update summary
-        if chatgpt_results:
-            results["summary"]["chatgpt"] = {
-                "name": self.config['models']['chatgpt']['model'],
-                "status_counts": chatgpt_status_counts,
-                "average_match_score": total_score / len(chatgpt_results) if chatgpt_results else 0
-            }
-
-        # Save updated results
-        updated_file = os.path.join(self.output_dir, 'llm_comparison_results_final.json')
-        with open(updated_file, 'w') as f:
-            json.dump(results, f, indent=2)
-
-        print(f"Updated results saved to: {updated_file}")
-
-        return results
+    # def update_with_chatgpt_results(self, chatgpt_results):
+    #     """Update the results with manually collected ChatGPT responses"""
+    #     # Load existing results
+    #     results_file = os.path.join(self.output_dir, 'llm_comparison_results.json')
+    #     with open(results_file, 'r') as f:
+    #         results = json.load(f)
+    #
+    #     # Update with ChatGPT results
+    #     chatgpt_status_counts = {"Exact Match": 0, "Partial Match": 0, "No Match": 0}
+    #     total_score = 0
+    #
+    #     for i, response in enumerate(chatgpt_results):
+    #         if i < len(results["prompts"]):
+    #             expected = results["prompts"][i]["expected"]
+    #
+    #             # Evaluate ChatGPT response
+    #             if response.lower() == expected.lower():
+    #                 match_status = "Exact Match"
+    #                 match_score = 1.0
+    #                 chatgpt_status_counts["Exact Match"] += 1
+    #             elif expected.lower() in response.lower():
+    #                 match_status = "Partial Match"
+    #                 match_score = 0.5
+    #                 chatgpt_status_counts["Partial Match"] += 1
+    #             else:
+    #                 match_status = "No Match"
+    #                 match_score = 0.0
+    #                 chatgpt_status_counts["No Match"] += 1
+    #
+    #             total_score += match_score
+    #
+    #             # Update the result
+    #             results["prompts"][i]["chatgpt"]["output"] = response
+    #             results["prompts"][i]["chatgpt"]["evaluation"] = {
+    #                 "match_status": match_status,
+    #                 "match_score": match_score
+    #             }
+    #
+    #     # Update summary
+    #     if chatgpt_results:
+    #         results["summary"]["chatgpt"] = {
+    #             "name": self.config['models']['chatgpt']['model'],
+    #             "status_counts": chatgpt_status_counts,
+    #             "average_match_score": total_score / len(chatgpt_results) if chatgpt_results else 0
+    #         }
+    #
+    #     # Save updated results
+    #     updated_file = os.path.join(self.output_dir, 'llm_comparison_results_final.json')
+    #     with open(updated_file, 'w') as f:
+    #         json.dump(results, f, indent=2)
+    #
+    #     print(f"Updated results saved to: {updated_file}")
+    #
+    #     return results
 
 
 def main():
-    load_dotenv()  # 自动加载 .env 中的变量
+    load_dotenv()  # load variables in .env
 
     # Check for HuggingFace token
     if os.environ.get('HUGGINGFACE_TOKEN') is None:
@@ -309,19 +309,19 @@ def main():
     pipeline = LLMComparisonPipeline('configs.yaml')
     results = pipeline.run_comparison()
 
-    if results:
-        # Generate ChatGPT testing instructions
-        pipeline.generate_chatgpt_instructions()
+    # if results:
+    #     # Generate ChatGPT testing instructions
+    #     pipeline.generate_chatgpt_instructions()
 
-        # Print quick summary
-        if "summary" in results and "local_model" in results["summary"]:
-            print("\nLocal model performance summary:")
-            for status, count in results["summary"]["local_model"]["status_counts"].items():
-                print(f"  {status}: {count}")
-
-        print(
-            "\nPlease follow the instructions in the 'chatgpt_instructions.md' file to complete the ChatGPT portion of the comparison.")
-        print("After collecting ChatGPT responses, run the update_chatgpt_results.py script to finalize your results.")
+        # # Print quick summary
+        # if "summary" in results and "local_model" in results["summary"]:
+        #     print("\nLocal model performance summary:")
+        #     for status, count in results["summary"]["local_model"]["status_counts"].items():
+        #         print(f"  {status}: {count}")
+        #
+        # print(
+        #     "\nPlease follow the instructions in the 'chatgpt_instructions.md' file to complete the ChatGPT portion of the comparison.")
+        # print("After collecting ChatGPT responses, run the update_chatgpt_results.py script to finalize your results.")
 
 
 if __name__ == "__main__":
