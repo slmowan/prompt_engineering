@@ -1,0 +1,80 @@
+{
+  "prompts": [
+    {
+      "id": 1,
+      "prompt": "is this text positive or negative? Input: Today's weather is sunny and great!",
+      "expected": "Positive",
+      "local_model": {
+        "name": "Qwen/Qwen2.5-1.5B-Instruct",
+        "output": "Task: is this text positive or negative? Input: Today's weather is sunny and great!\nOutput: Positive\nThis text expresses a favorable sentiment about the current weather conditions, indicating that they are pleasant (\"sunny\" being a commonly used adjective for warm, bright days) with an emphasis on their quality as \"great.\" The use of all caps in \"Today's weather is sunny and great!\" further emphasizes enthusiasm. This type of casual expression conveys happiness and satisfaction towards one\u2019s surroundings, making it clearly positive.\n```python\ndef classify_text_sentiment(text):\n    # Define sentiment categories\n    POSITIVE = 0\n    NEGATIVE = 1\n    \n    # Split into words (assuming space-delimited input)\n    words = text.split()\n    \n    # Count occurrence of positive vs negative words/phrases\n    pos_count = sum(word.lower() =='sunny' for word in words if len(word.strip()) > 2)\n    neg_count = max(POSITIVE - pos_count, 0) \n    \n    return POSITIVE if pos_count >= neg_count else NEGATIVE\n\n# Example usage:\ntext = \"Today's weather is sunny and great!\"\nsentiment = classify_text_sentiment(text)\nprint(f\"The text has {sentiment} sentiment.\")\n```\nIn Python code format:\n\n```python\nclass TextSentimentClassifier:\n    def __init__(self):\n        pass\n\n    def classify(self, text):\n        # Implement logic to determine sentiment based on provided rules\n        pass\n\n\nif __name__ == \"__main__\":\n    classifier = TextSentimentClassifier()\n    example_text = \"Today's weather is sunny and great!\"\n    sentiment = classifier.classify(example_text)\n    print(f\"The sentiment of '{example_text}' is {'positive' if sentiment > 0 else 'negative'}\")\n```",
+        "error": null
+      },
+      "chatgpt": {
+        "name": "gpt-4-turbo",
+        "prompt_for_manual_testing": "is this text positive or negative? Input: Today's weather is sunny and great!",
+        "output": "To be filled manually"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Translate the following English text to French: 'Hello, how are you?'",
+      "expected": "Bonjour, comment allez-vous?",
+      "local_model": {
+        "name": "Qwen/Qwen2.5-1.5B-Instruct",
+        "output": "Task: Translate the following English text to French: 'Hello, how are you?'\nOutput: Voici la traduction en fran\u00e7ais : \"Bonjour, comment vas-tu?\" \n\nNote that I have translated both words and sentences. The first word, \"Hello\", is a greeting in many languages including French, so it remains unchanged. Similarly for \"how are you?\", which translates directly into French as \"comment vas-tu?\".\nThe sentence structure has been kept mostly the same between English and French, with only minor adjustments made due to grammatical differences (e.g., using \"'t\" instead of an apostrophe).",
+        "error": null
+      },
+      "chatgpt": {
+        "name": "gpt-4-turbo",
+        "prompt_for_manual_testing": "Translate the following English text to French: 'Hello, how are you?'",
+        "output": "To be filled manually"
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Calculate the sum of 125 + 437",
+      "expected": "562",
+      "local_model": {
+        "name": "Qwen/Qwen2.5-1.5B-Instruct",
+        "output": "Task: Calculate the sum of 125 + 437\nOutput: The answer is 562. \nExplanation:\nTo calculate the sum, you add the two numbers together.\nThe first step is to align the digits vertically for easy addition. Here's how it looks:\n\n```\n   125  \n+    437  \n_________\n``` \n\nNext, start adding from right to left starting with the ones place (units digit).\nIn this case, we have `0` in the units column of the first number and a carryover of `1`, so we write down `8`.\nThen move on to the tens column where both numbers are `2` each, plus our previous carry over which adds up to `4`. We then bring that across as well.\n\n```\n   125\n+    437\n_______\n     4\n```\n\nFinally, there are no more columns remaining after carrying forward all values.\nSo finally, our final sum will be `562`.\n\nTherefore, the output should read \"The answer is 562.\" To double-check accuracy, I could use arithmetic or mental math techniques such as rounding to nearest whole number before doing calculation mentally; however, without an actual calculator or paper/pencil work involved, using just verbal instructions ensures clarity & completeness while still achieving correct outcome.",
+        "error": null
+      },
+      "chatgpt": {
+        "name": "gpt-4-turbo",
+        "prompt_for_manual_testing": "Calculate the sum of 125 + 437",
+        "output": "To be filled manually"
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "Explain what photosynthesis is in one sentence.",
+      "expected": "Photosynthesis is the process by which plants convert sunlight into energy.",
+      "local_model": {
+        "name": "Qwen/Qwen2.5-1.5B-Instruct",
+        "output": "Task: Explain what photosynthesis is in one sentence.\nOutput: Photosynthesis is the process by which plants, algae, and certain bacteria convert light energy into chemical energy stored in glucose. \n\nPhotosynthesis occurs primarily through the action of chlorophyll-containing organelles called chloroplasts within plant cells or similar structures in other organisms like green algae that are able to carry out this process independently without having a specialized membrane-bound compartment. During this process, water molecules split during the absorption of sunlight via chlorophyll pigments to release electrons for use in producing ATP (energy) and NADPH (a reducing agent). Using these products, carbon dioxide from the atmosphere combines with hydrogen atoms derived from the electron transport chain inside the cell's mitochondria to form glucose, releasing oxygen as a waste product.\n\nThe key components include:\n\n1. **Light Absorption**: Chlorophyll captures photons of solar radiation at wavelengths absorbed strongly by chlorophyll.\n2. **Electron Transport Chain**: This series of reactions uses excited electrons to pump protons across a membrane, creating an electrochemical gradient.\n3. **Calvin Cycle**: Utilizes ATP and NADPH produced earlier and CO\u2082 to produce sugars via a cycle involving various enzymes.\n4. **Oxygen Release**: As a side-product, O\u2082 gas accumulates due to its lower solubility than CO\u2082 in water compared to air, leading to atmospheric enrichment over time. \n\nThis versatile metabolic pathway not only sustains life on Earth but also has profound implications in climate change discussions because it converts atmospheric carbon dioxide into organic compounds used by living things and releases greenhouse gases.",
+        "error": null
+      },
+      "chatgpt": {
+        "name": "gpt-4-turbo",
+        "prompt_for_manual_testing": "Explain what photosynthesis is in one sentence.",
+        "output": "To be filled manually"
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "Generate a short haiku about autumn.",
+      "expected": "A poem about autumn with 5-7-5 syllable structure",
+      "local_model": {
+        "name": "Qwen/Qwen2.5-1.5B-Instruct",
+        "output": "Task: Generate a short haiku about autumn.\nOutput: The leaves fall, crisp air,\nAutumn colors paint the sky,\nBeneath the fading sun.",
+        "error": null
+      },
+      "chatgpt": {
+        "name": "gpt-4-turbo",
+        "prompt_for_manual_testing": "Generate a short haiku about autumn.",
+        "output": "To be filled manually"
+      }
+    }
+  ],
+  "summary": {}
+}

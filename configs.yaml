@@ -1,10 +1,10 @@
+#  step 1 params
 experiment:
   name: "LLM_Comparison"
   description: "Comparing ChatGPT with local open-source LLM"
 
 models:
   local:
-#    name: "meta-llama/Llama-3.2-1B-Instruct"
     name: "Qwen/Qwen2.5-1.5B-Instruct"
     # Alternative options:
     # - "meta-llama/Llama-3.2-3B-Instruct"
@@ -39,22 +39,6 @@ prompt_pairs:
   - prompt: "Generate a short haiku about autumn."
     expected: "A poem about autumn with 5-7-5 syllable structure"
 
-#prompt_pairs:
-#  - task: "is this text positive or negative?"
-#    input: "Today's weather is sunny and great!"
-#    expected: "Positive"
-#  - task: "Translate the following English text to French"
-#    input: "Hello, how are you?"
-#    expected: "Bonjour, comment allez-vous?"
-#  - task: "Calculate the sum of"
-#    input: "125 + 437"
-#    expected: "562"
-#  - task: "Explain what photosynthesis is in one sentence"
-#    input: ""
-#    expected: "Photosynthesis is the process by which plants convert sunlight into energy."
-#  - task: "Generate a short haiku about autumn"
-#    input: ""
-#    expected: "A poem about autumn with 5-7-5 syllable structure"
 
 output:
   save_results: true
